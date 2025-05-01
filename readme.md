@@ -72,19 +72,6 @@ You don’t need a compiler to render a fraction. You need a `<div>`. Matdown le
 
 ---
 
-## 📦 Install / Use
-
-Matdown is zero-dependency and browser-ready.
-
-```html
-<script src="matdown.js"></script>
-<div id="math-output"></div>
-<script>
-  const output = buildNode("x^2 / (1+x)");
-  document.getElementById('math-output').appendChild(output);
-</script>
-```
-
 ---
 
 ##  Philosophy
