@@ -113,4 +113,4 @@ Matdown was born from frustration — and built for clarity.
 
 ## 📜 License
 
-MIT License — Use it, fork it, remix it. Just don’t LaTeX it.
+MIT License — Bop it, fork it, remix it. Just don’t LaTeX it.
