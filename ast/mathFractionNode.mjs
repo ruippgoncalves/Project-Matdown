@@ -1,10 +1,17 @@
 import MathBranchNode from './base/mathBranchNode.mjs';
+import MathPlaceholderNode from './mathPlaceholderNode.mjs';
 
 export default class MathFractionNode extends MathBranchNode {
- constructor(numerator, denominator) {
-    super(false);
+  constructor() {
+    const numerator = new MathPlaceholderNode();
+    const denominator = new MathPlaceholderNode();
+    super([numerator, denominator]);
     this.numerator = numerator;
     this.denominator = denominator;
+  }
+
+  updateRequiresParenthesis() {
+    return false;
   }
 
   *getChildren() {

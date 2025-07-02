@@ -2,8 +2,12 @@ import MathBranchNode from "./base/mathBranchNode.mjs";
 
 export default class MathNameNode extends MathBranchNode {
   constructor(name) {
-    super(false);
+    super([]);
     this.name = name;
+  }
+
+  updateRequiresParenthesis() {
+    return false;
   }
 
   *getChildren() {

@@ -11,16 +11,16 @@ export default class MathParser {
 
   advance() {
     this.pos++;
-    this.currentChar = this.pos < this.text.length ? this.text[this.pos] : null;
+    this.currentChar = this.pos < this.text.length ? this.text[this.pos] : '\0';
   }
 
   peek() {
-    return this.pos + 1 < this.text.length ? this.text[this.pos + 1] : null;
+    return this.pos + 1 < this.text.length ? this.text[this.pos + 1] : '\0';
   }
 
   parse() {
     const node = this.expr();
-    if (this.currentChar !== null) throw new Error("Unexpected character at end");
+    if (this.currentChar !== '\0') throw new Error("Unexpected character at end");
     return node;
   }
 
@@ -97,7 +97,7 @@ export default class MathParser {
 
         if (this.currentChar === ')') {
           this.advance();
-          return new MathFunctionNode(nameNode, args);
+          return new MathFunctionNode(nameNode, 0);
         }
 
         while (true) {
@@ -114,7 +114,9 @@ export default class MathParser {
           }
         }
 
-        return new MathFunctionNode(nameNode, args);
+        const func = new MathFunctionNode(nameNode, args.length);
+        for (let i = 0; i < args.length; i++) func.args[i].node = args[i];
+        return func;
       }
 
       return nameNode;
@@ -131,7 +133,9 @@ export default class MathParser {
       const operator = this.currentChar;
       this.advance();
       const operand = this.binary(unaryOperatorPrecedence);
-      left = new MathUnaryOperationNode(operator, operand);
+      const unary = new MathUnaryOperationNode(operator);
+      unary.expression.node = operand;
+      left = unary;
     } else {
       left = this.primary();
     }
@@ -147,13 +151,23 @@ export default class MathParser {
 
       switch (operator) {
         case '^':
-          left = new MathExponentNode(left, right);
+          const exponent = new MathExponentNode();
+          exponent.base.node = left;
+          exponent.exponent.node = right;
+          left = exponent;
           break;
         case '/':
-          left = new MathFractionNode(left, right);
+          const fraction = new MathFractionNode();
+          fraction.numerator.node = left;
+          fraction.denominator.node = right;
+          left = fraction;
           break;
         default:
-          left = new MathOperationNode(left, operator, right);
+          const operation = new MathOperationNode(operator);
+          operation.left.node = left;
+          operation.right.node = right;
+          left = operation;
+          break;
       }
     }
 

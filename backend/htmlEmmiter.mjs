@@ -2,9 +2,10 @@ import { MathVisitor, MathBranchNode } from '../ast/index.mjs';
 
 export default class MathHtmlEmmiter extends MathVisitor {
   visit(node) {
+    const requiresParen = node instanceof MathBranchNode && node.updateRequiresParenthesis();
     let result = super.visit(node);
 
-    if (node instanceof MathBranchNode && node.requiresParenthesis) {
+    if (requiresParen) {
       result = `<span>(${result})</span>`;
     }
 
@@ -79,5 +80,11 @@ export default class MathHtmlEmmiter extends MathVisitor {
         <div class="matdowndenominator">${this.visit(node.denominator)}</div>
       </div>
     `;
+  }
+
+  visitPlaceholder(node) {
+    return node.node !== null
+      ? this.visit(node.node)
+      : `<span class="matdowngroup"></span>`;
   }
 }

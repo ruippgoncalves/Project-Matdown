@@ -9,6 +9,7 @@ import MathExponentNode from './mathExponentNode.mjs';
 import MathOperationNode from './mathOperationNode.mjs';
 import MathUnaryOperationNode from './mathUnaryOperationNode.mjs';
 import MathFractionNode from './mathFractionNode.mjs';
+import MathPlaceholderNode from "./mathPlaceholderNode.mjs";
 
 export default class MathVisitor {
   visit(node) {
@@ -34,6 +35,8 @@ export default class MathVisitor {
       return this.visitUnaryOperation(node);
     } else if (node instanceof MathFractionNode) {
       return this.visitFraction(node);
+    } else if (node instanceof MathPlaceholderNode) {
+      return this.visitPlaceholder(node);
     } else {
       throw new Error(`Unknown node type: ${typeof node}`);
     }
@@ -84,6 +87,10 @@ export default class MathVisitor {
   }
 
   visitFraction(node) {
+    throw new Error("Abstract method cannot be called.");
+  }
+
+  visitPlaceholder(node) {
     throw new Error("Abstract method cannot be called.");
   }
 }

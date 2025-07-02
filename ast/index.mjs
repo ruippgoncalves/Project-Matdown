@@ -9,6 +9,8 @@ export { default as MathExponentNode } from './mathExponentNode.mjs';
 export { default as MathOperationNode } from './mathOperationNode.mjs';
 export { default as MathUnaryOperationNode } from './mathUnaryOperationNode.mjs';
 export { default as MathFractionNode } from './mathFractionNode.mjs';
+export { default as MathPlaceholderNode } from './mathPlaceholderNode.mjs';
+
 export { default as MathVisitor } from "./mathVisitor.mjs";
 
 export { default as MathNode } from './base/mathNode.mjs';

@@ -2,8 +2,12 @@ import MathBranchNode from './base/mathBranchNode.mjs';
 
 export default class MathNumberNode extends MathBranchNode {
   constructor(digits) {
-    super(false);
+    super([]);
     this.digits = digits;
+  }
+
+  updateRequiresParenthesis() {
+    return false;
   }
 
   *getChildren() {

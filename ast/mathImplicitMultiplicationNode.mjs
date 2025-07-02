@@ -2,9 +2,13 @@ import MathBranchNode from "./base/mathBranchNode.mjs";
 
 export default class MathImplicitMultiplicationNode extends MathBranchNode {
   constructor(left, right) {
-    super(false);
+    super([]);
     this.left = left;
     this.right = right;
+  }
+
+  updateRequiresParenthesis() {
+    return false;
   }
 
   *getChildren() {
