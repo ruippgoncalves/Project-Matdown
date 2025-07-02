@@ -12,7 +12,7 @@ It’s inspired by the realization that game engines, like cloud services, are j
 ##  Why ?
 
 - ✅ No parser generators
-- ✅ No ASTs
+- ✅ Minimal AST
 - ✅ No LaTeX
 - ✅ No DOM hell
 - ✅ No stylesheets from the Math Wizard Society™ ruining your vibe
@@ -39,28 +39,6 @@ Instead:
   <span class="denominator">(2x - 3)</span>
 </div>
 ```
-
----
-
-## 🛠 How It Works
-
-### 1. **Recursive Descent Parsing**
-- Function: `buildNode(exp)`
-- Splits expression by outermost operator
-- Recursively wraps sub-parts into semantic HTML containers
-
-### 2. **Parentheses Matching**
-- Function: `matchingParens(str)`
-- Uses a counter-based matcher to balance `()` pairs safely
-
-### 3. **Operator Precedence**
-- Left-to-right scan
-- Evaluates only outermost operators unless overridden by parentheses
-- Fast and linear for common math expressions
-
-### 4. **Symbol Search Filtering**
-- Smart input filtering using `.filter()` on a static symbol list
-- Zero-cost search experience for inline math menus
 
 ---
 
