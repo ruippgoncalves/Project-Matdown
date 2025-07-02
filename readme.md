@@ -36,7 +36,7 @@ Instead:
 ```html
 <div class="fraction">
   <span class="numerator">(1+x)<sup>2</sup></span>
-  <span class="denominator">(2x - 3)</span>
+  <span class="denominator">2x - 3</span>
 </div>
 ```
 
@@ -47,8 +47,6 @@ Instead:
 > They're bloated, margin-fighting, box-model-reinventing beasts.
 
 You don’t need a compiler to render a fraction. You need a `<div>`. Matdown leans into browser-native layouts — because **HTML is the universal rendering target** anyway.
-
----
 
 ---
 
