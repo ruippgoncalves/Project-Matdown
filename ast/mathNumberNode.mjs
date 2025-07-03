@@ -1,13 +1,9 @@
-import MathBranchNode from './base/mathBranchNode.mjs';
+import MathLeafNode from './base/mathLeafNode.mjs';
 
-export default class MathNumberNode extends MathBranchNode {
-  constructor(digits) {
-    super([]);
-    this.digits = digits;
-  }
-
-  updateRequiresParenthesis() {
-    return false;
+export default class MathNumberNode extends MathLeafNode {
+  constructor(digit) {
+    super();
+    this.digits = [digit];
   }
 
   *getChildren() {

@@ -12,8 +12,7 @@ export default class MathExponentNode extends MathBranchNode {
     this.exponent = exponent;
   }
 
-  updateRequiresParenthesis() {
-    if (this.base.node instanceof MathOperationNode && getBinaryOperatorPrecedence(this.base.node.operator) < getBinaryOperatorPrecedence(symbols.exponent)) this.base.node.requiresParen = true;
+  requiresParenthesis() {
     return false;
   }
 

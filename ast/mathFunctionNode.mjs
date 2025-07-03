@@ -8,7 +8,7 @@ export default class MathFunctionNode extends MathBranchNode {
     this.args = args;
   }
 
-  updateRequiresParenthesis() {
+  requiresParenthesis() {
     return false;
   }
 

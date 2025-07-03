@@ -10,7 +10,7 @@ export default class MathUnaryOperationNode extends MathBranchNode {
     this.expression = expression;
   }
 
-  updateRequiresParenthesis() {
+  requiresParenthesis() {
     return false;
   }
 

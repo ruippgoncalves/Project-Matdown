@@ -14,7 +14,7 @@ export { default as MathPlaceholderNode } from './mathPlaceholderNode.mjs';
 export { default as MathVisitor } from "./mathVisitor.mjs";
 
 export { default as MathNode } from './base/mathNode.mjs';
-export { default as MathLeaftNode } from './base/mathLeafNode.mjs';
+export { default as MathLeafNode } from './base/mathLeafNode.mjs';
 export { default as MathBranchNode } from './base/mathBranchNode.mjs';
 export { default as MathPartOfNumber } from './base/mathPartOfNumberNode.mjs';
 export { default as MathTreeNode } from './base/mathTreeNode.mjs';

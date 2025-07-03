@@ -1,17 +1,13 @@
-import MathBranchNode from "./base/mathBranchNode.mjs";
+import MathLeafNode from './base/mathLeafNode.mjs';
 
-export default class MathNameNode extends MathBranchNode {
-  constructor(name) {
-    super([]);
-    this.name = name;
-  }
-
-  updateRequiresParenthesis() {
-    return false;
+export default class MathNameNode extends MathLeafNode {
+  constructor(character) {
+    super();
+    this.characters = [character];
   }
 
   *getChildren() {
-    for (let character of this.name)
+    for (let character of this.characters)
       yield character;
   }
 }

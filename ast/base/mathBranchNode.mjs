@@ -15,15 +15,7 @@ export default class MathBranchNode extends MathTreeNode {
     }
   }
 
-  updateRequiresParenthesis() {
+  requiresParenthesis() {
     throw new Error("Abstract method cannot be called.");
-  }
-
-  getMoveDownSuggestion(fromPlaceholder) {
-    return null;
-  }
-
-  getMoveUpSuggestion(fromPlaceholder) {
-    return null;
   }
 }

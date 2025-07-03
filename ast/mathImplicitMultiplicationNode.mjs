@@ -1,14 +1,10 @@
-import MathBranchNode from "./base/mathBranchNode.mjs";
+import MathLeafNode from './base/mathLeafNode.mjs';
 
-export default class MathImplicitMultiplicationNode extends MathBranchNode {
+export default class MathImplicitMultiplicationNode extends MathLeafNode {
   constructor(left, right) {
-    super([]);
+    super();
     this.left = left;
     this.right = right;
-  }
-
-  updateRequiresParenthesis() {
-    return false;
   }
 
   *getChildren() {

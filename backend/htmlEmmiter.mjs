@@ -1,11 +1,15 @@
 import { MathVisitor, MathBranchNode } from '../ast/index.mjs';
 
 export default class MathHtmlEmmiter extends MathVisitor {
+  constructor(keyboard) {
+    super();
+    this.keyboard = keyboard;
+  }
+
   visit(node) {
-    const requiresParen = node instanceof MathBranchNode && node.updateRequiresParenthesis();
     let result = super.visit(node);
 
-    if (requiresParen) {
+    if (node instanceof MathBranchNode && node.requiresParenthesis()) {
       result = `<span>(${result})</span>`;
     }
 
@@ -83,8 +87,14 @@ export default class MathHtmlEmmiter extends MathVisitor {
   }
 
   visitPlaceholder(node) {
-    return node.node !== null
+    let placeholder = node.node !== null
       ? this.visit(node.node)
       : `<span class="matdowngroup"></span>`;
+
+    if (this.keyboard.current === node || this.keyboard.current === node.node) {
+      placeholder = `<span class="matdownselected">${placeholder}</span>`;
+    }
+
+    return placeholder;
   }
 }

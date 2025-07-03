@@ -10,7 +10,7 @@ export default class MathFractionNode extends MathBranchNode {
     this.denominator = denominator;
   }
 
-  updateRequiresParenthesis() {
+  requiresParenthesis() {
     return false;
   }
 
