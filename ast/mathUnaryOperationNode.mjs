@@ -1,5 +1,4 @@
 import MathBranchNode from "./base/mathBranchNode.mjs";
-import MathOperationNode from "./mathOperationNode.mjs";
 import MathPlaceholderNode from './mathPlaceholderNode.mjs'
 
 export default class MathUnaryOperationNode extends MathBranchNode {

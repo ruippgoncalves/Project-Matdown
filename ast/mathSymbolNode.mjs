@@ -1,8 +1,8 @@
 import MathLeafNode from './base/mathLeafNode.mjs';
 
 export default class MathCharacterNode extends MathLeafNode {
-  constructor(character) {
+  constructor(symbol) {
     super();
-    this.character = character;
+    this.symbol = symbol;
   }
 }

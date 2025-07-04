@@ -49,14 +49,14 @@
     .matdownselected {
         background-color: aqua;
     }
-    .matdownkeyboard {
+    #matdownkeyboard {
         margin-top: 10px;
         display: flex;
         flex-direction: row;
         gap: 10px;
         flex-wrap: wrap;
     }
-    .matdownkeyboard > div {
+    #matdownkeyboard > div {
         border: 1px solid black;
         padding: 10px;
     }
@@ -119,40 +119,12 @@
 <div class="matdowncontainer">
   <h3>Formula:</h3>
   <div id="renderArea"></div>
-  <div class="matdownkeyboard">
+  <div id="matdownkeyboard">
     <div id="delete">⌫</div>
     <div id="left">←</div>
     <div id="right">→</div>
     <div id="up">↑</div>
-    <div id="digit0"></div>
-    <div id="digit1"></div>
-    <div id="digit2"></div>
-    <div id="digit3"></div>
-    <div id="digit4"></div>
-    <div id="digit5"></div>
-    <div id="digit6"></div>
-    <div id="digit7"></div>
-    <div id="digit8"></div>
-    <div id="digit9"></div>
     <div id="seperator">.</div>
-    <div id="a"></div>
-    <div id="b"></div>
-    <div id="c"></div>
-    <div id="x"></div>
-    <div id="y"></div>
-    <div id="z"></div>
-    <div id="equals"></div>
-    <div id="notEquals"></div>
-    <div id="less"></div>
-    <div id="greater"></div>
-    <div id="lessEquals"></div>
-    <div id="greaterEquals"></div>
-    <div id="plus"></div>
-    <div id="minus"></div>
-    <div id="times"></div>
-    <div id="division"></div>
-    <div id="fraction"></div>
-    <div id="exponent"></div>
   </div>
 
   <h3>Embeddable HTML Output:</h3>
@@ -160,7 +132,7 @@
 </div>
 
 <script type="module">
-import {MathDigitNode, MathCharacterNode, MathOperationNode, MathPlaceholderNode, MathExponentNode, MathFractionNode} from './ast/index.mjs';
+import {MathDigitNode, MathSymbolNode, MathUnaryOperationNode, MathOperationNode, MathPlaceholderNode, MathExponentNode, MathFractionNode, MathFunctionNode} from './ast/index.mjs';
 import MathKeyboard from './keyboard/index.mjs';
 import MathHtmlEmmiter from './output/htmlEmmiter.mjs';
 import symbols from './syntax/symbols.mjs';
@@ -175,22 +147,24 @@ function display() {
   document.getElementById('htmlOutput').value = '<div class="algorithm">\n' + outputHTML.innerHTML + '\n</div>';
 }
 
-function registerNodeKey(elementId, key, create, insert=keyboard.insert) {
-  const element = document.getElementById(elementId);
+function registerNodeKey(key, create, insert=keyboard.insert) {
+  const element = document.getElementById('matdownkeyboard');
 
   const placeholder = new MathPlaceholderNode();
   placeholder.node = create();
   placeholder.node.parentPlaceholder = placeholder.node;
   const contents = emmiter.visit(placeholder);
-
-  element.appendChild(contents);
+  
+  const div = document.createElement('div');
+  div.appendChild(contents);
+  element.appendChild(div);
   
   const handleInsert = () => {
     insert.bind(keyboard)(create());
     display();
   };
 
-  element.onclick = handleInsert;
+  div.onclick = handleInsert;
 
   if (key) {
     document.addEventListener("keyup", (event) => {
@@ -203,25 +177,55 @@ function registerNodeKey(elementId, key, create, insert=keyboard.insert) {
 }
 
 for (let digit = 0; digit < 10; digit++) {
-  registerNodeKey('digit' + digit, digit.toString(), () => new MathDigitNode(digit), keyboard.insertDigit);
+  registerNodeKey(digit.toString(), () => new MathDigitNode(digit), keyboard.insertDigit);
 }
 
 for (let letter of ['a', 'b', 'c', 'x', 'y', 'z']) {
-  registerNodeKey(letter, letter, () => new MathCharacterNode(letter), keyboard.insertCharacter);
+  registerNodeKey(letter, () => new MathSymbolNode(letter), keyboard.insertSymbol);
 }
 
-registerNodeKey('equals', symbols.equals, () => new MathOperationNode(symbols.equals));
-registerNodeKey('notEquals', symbols.notEquals, () => new MathOperationNode(symbols.notEquals));
-registerNodeKey('less', symbols.less, () => new MathOperationNode(symbols.less));
-registerNodeKey('greater', symbols.greater, () => new MathOperationNode(symbols.greater));
-registerNodeKey('lessEquals', symbols.lessEquals, () => new MathOperationNode(symbols.lessEquals));
-registerNodeKey('greaterEquals', symbols.greaterEquals, () => new MathOperationNode(symbols.greaterEquals));
-registerNodeKey('plus', symbols.plus, () => new MathOperationNode(symbols.plus));
-registerNodeKey('minus', symbols.minus, () => new MathOperationNode(symbols.minus));
-registerNodeKey('times', symbols.times, () => new MathOperationNode(symbols.times));
-registerNodeKey('division', symbols.division, () => new MathOperationNode(symbols.division));
-registerNodeKey('fraction', symbols.fraction, () => new MathFractionNode());
-registerNodeKey('exponent', symbols.exponent, () => new MathExponentNode());
+registerNodeKey(symbols.equals, () => new MathOperationNode(symbols.equals));
+registerNodeKey(symbols.notEquals, () => new MathOperationNode(symbols.notEquals));
+registerNodeKey(symbols.less, () => new MathOperationNode(symbols.less));
+registerNodeKey(symbols.greater, () => new MathOperationNode(symbols.greater));
+registerNodeKey(symbols.lessEquals, () => new MathOperationNode(symbols.lessEquals));
+registerNodeKey(symbols.greaterEquals, () => new MathOperationNode(symbols.greaterEquals));
+registerNodeKey(symbols.plus, () => new MathOperationNode(symbols.plus));
+registerNodeKey(symbols.minus, () => new MathOperationNode(symbols.minus));
+registerNodeKey(null, () => new MathOperationNode(symbols.plusMinus));
+registerNodeKey(null, () => new MathUnaryOperationNode(symbols.plus));
+registerNodeKey(null, () => new MathUnaryOperationNode(symbols.minus));
+registerNodeKey(null, () => new MathUnaryOperationNode(symbols.plusMinus));
+registerNodeKey(symbols.times, () => new MathUnaryOperationNode(symbols.times));
+registerNodeKey(symbols.division, () => new MathOperationNode(symbols.division));
+registerNodeKey(symbols.fraction, () => new MathFractionNode());
+registerNodeKey(symbols.exponent, () => new MathExponentNode());
+
+registerNodeKey(null, () => new MathSymbolNode(symbols.infinity), keyboard.insertSymbol);
+registerNodeKey(symbols.approximatelyEqual, () => new MathOperationNode(symbols.approximatelyEqual));
+registerNodeKey(symbols.equivalentTo, () => new MathOperationNode(symbols.equivalentTo));
+registerNodeKey(symbols.congruentTo, () => new MathOperationNode(symbols.congruentTo));
+registerNodeKey(null, () => new MathSymbolNode(symbols.capitalSigma), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.capitalPi), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.capitalGamma), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.capitalLambda), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.capitalDelta), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.alpha), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.beta), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.gamma), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.delta), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.theta), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.lambda), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.mu), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.pi), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.phi), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathSymbolNode(symbols.omega), keyboard.insertSymbol);
+registerNodeKey(null, () => new MathFunctionNode('sin', 1));
+registerNodeKey(null, () => new MathFunctionNode('cos', 1));
+registerNodeKey(null, () => new MathFunctionNode('tan', 1));
+registerNodeKey(null, () => new MathFunctionNode('arcsin', 1));
+registerNodeKey(null, () => new MathFunctionNode('arccos', 1));
+registerNodeKey(null, () => new MathFunctionNode('arctan', 1));
 
 document.getElementById('delete').onclick = () => {keyboard.delete(); display();};
 document.getElementById('left').onclick = () => {keyboard.moveLeft(); display();};

@@ -1,8 +1,7 @@
 export { default as MathDigitNode } from "./mathDigitNode.mjs";
 export { default as MathDecimalSeperatorNode } from './mathDecimalSeperatorNode.mjs';
 export { default as MathNumberNode } from './mathNumberNode.mjs';
-export { default as MathCharacterNode } from './mathCharacterNode.mjs'
-export { default as MathNameNode } from './mathNameNode.mjs'
+export { default as MathSymbolNode } from './mathSymbolNode.mjs'
 export { default as MathImplicitMultiplicationNode } from './mathImplicitMultiplicationNode.mjs'
 export { default as MathFunctionNode } from './mathFunctionNode.mjs';
 export { default as MathExponentNode } from './mathExponentNode.mjs';

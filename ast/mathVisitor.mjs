@@ -1,8 +1,7 @@
 import MathDigitNode from "./mathDigitNode.mjs";
 import MathDecimalSeperatorNode from './mathDecimalSeperatorNode.mjs';
 import MathNumberNode from './mathNumberNode.mjs';
-import MathCharacterNode from './mathCharacterNode.mjs'
-import MathNameNode from './mathNameNode.mjs'
+import MathSymbolNode from './mathSymbolNode.mjs'
 import MathImplicitMultiplicationNode from './mathImplicitMultiplicationNode.mjs'
 import MathFunctionNode from './mathFunctionNode.mjs';
 import MathExponentNode from './mathExponentNode.mjs';
@@ -19,10 +18,8 @@ export default class MathVisitor {
       return this.visitDecimalSeperator(node);
     } else if (node instanceof MathNumberNode) {
       return this.visitNumber(node);
-    } else if (node instanceof MathCharacterNode) {
-      return this.visitCharacter(node);
-    } else if (node instanceof MathNameNode) {
-      return this.visitName(node);
+    } else if (node instanceof MathSymbolNode) {
+      return this.visitSymbol(node);
     } else if (node instanceof MathImplicitMultiplicationNode) {
       return this.visitImplicitMultiplication(node);
     } else if (node instanceof MathFunctionNode) {
@@ -58,11 +55,7 @@ export default class MathVisitor {
     throw new Error("Abstract method cannot be called.");
   }
 
-  visitCharacter(node) {
-    throw new Error("Abstract method cannot be called.");
-  }
-
-  visitName(node) {
+  visitSymbol(node) {
     throw new Error("Abstract method cannot be called.");
   }
 

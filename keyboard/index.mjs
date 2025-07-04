@@ -1,4 +1,4 @@
-import { MathPlaceholderNode, MathDigitNode, MathNumberNode, MathLeafNode, MathBranchNode, MathNameNode, MathDecimalSeperatorNode, MathImplicitMultiplicationNode } from "../ast/index.mjs";
+import { MathPlaceholderNode, MathDigitNode, MathNumberNode, MathBranchNode, MathDecimalSeperatorNode, MathImplicitMultiplicationNode } from "../ast/index.mjs";
 
 export default class MathKeyboard {
   constructor() {
@@ -124,20 +124,15 @@ export default class MathKeyboard {
     this.current.digits.push(new MathDecimalSeperatorNode());
   }
 
-  insertCharacter(char) {
-    if (this.current instanceof MathNameNode) {
-      this.current.characters.push(char);
-    } else if (this.current instanceof MathImplicitMultiplicationNode) {
-      console.assert(this.current.right instanceof MathNameNode);
-      this.current.right.characters.push(char);
-    } else if (this.current instanceof MathNumberNode) {
+  insertSymbol(symbol) {
+    if (this.current instanceof MathNumberNode) {
       let cur = this.current;
       this.insert(new MathImplicitMultiplicationNode());
       cur.parentPlaceholder = null;
       this.current.left = cur;
-      this.current.right = new MathNameNode(char);
+      this.current.right = symbol;
     } else {
-      this.insert(new MathNameNode(char));
+      this.insert(symbol);
     }
   }
 
@@ -165,12 +160,7 @@ export default class MathKeyboard {
     if (this.current instanceof MathNumberNode) {
       this.current.digits.pop();
       if (this.current.digits.length != 0) return;
-    } else if (this.current instanceof MathNameNode) {
-      this.current.characters.pop();
-      if (this.current.characters.length != 0) return;
     } else if (this.current instanceof MathImplicitMultiplicationNode) {
-      this.current.right.characters.pop();
-      if (this.current.right.characters.length != 0) return;
       const number = this.current.left;
       this.insert(number);
       return;

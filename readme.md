@@ -3,7 +3,7 @@
 
 ##  What is Matdown?
 
-**Matdown** is a compact, dependency-free equation parser that turns lightweight math expressions into styled, semantic HTML — no LaTeX, no external libraries, no regrets.
+**Matdown** is a compact, dependency-free equation editor that turns lightweight math expressions into styled, semantic HTML — no LaTeX, no external libraries, no regrets.
 
 It’s inspired by the realization that game engines, like cloud services, are just real-time systems — and HTML/CSS are expressive primitives that deserve more credit.
 
@@ -18,27 +18,10 @@ It’s inspired by the realization that game engines, like cloud services, are j
 - ✅ No stylesheets from the Math Wizard Society™ ruining your vibe
 
 Instead:
-- ✨ Uses recursive string parsing
+- ✨ Inline keyboard editing
+- ✨ Don't worry about parenthesis (math aware input)
 - ✨ Renders DOM directly (fractions, exponents, etc.)
 - ✨ Leverages the box model & inline layout
-- ✨ Comes with a modular, non-intrusive context menu UI
-
----
-
-## 🧪 Example Input
-
-```
-(1+x)^2 / (2x - 3)
-```
-
-## ⬇️ Becomes
-
-```html
-<div class="fraction">
-  <span class="numerator">(1+x)<sup>2</sup></span>
-  <span class="denominator">2x - 3</span>
-</div>
-```
 
 ---
 
@@ -60,9 +43,8 @@ HTML and CSS aren’t just for design — they’re universal, transferable skil
 
 ## 🧩 Roadmap
 
-- [ ] Inline editing
-- [ ] Touch-friendly symbol picker
-- [ ] Expand support for integrals/summations
+- [ ] Keyboard groups for easier and faster typing
+- [ ] Expand support for integrals/summations/roots/matrices/vectors/unary postfix operators
 - [ ] Export to SVG or Canvas
 
 ---

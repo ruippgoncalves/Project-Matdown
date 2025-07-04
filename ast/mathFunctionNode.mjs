@@ -1,10 +1,11 @@
 import MathBranchNode from "./base/mathBranchNode.mjs";
+import MathPlaceholderNode from "./mathPlaceholderNode.mjs";
 
 export default class MathFunctionNode extends MathBranchNode {
   constructor(name, argCount) {
-    const args = new Array(argCount).fill(null).map(() => new Placeholder());
+    const args = new Array(argCount).fill(null).map(() => new MathPlaceholderNode());
     super(args);
-    this.name = name; // TODO to string
+    this.name = name;
     this.args = args;
   }
 
@@ -13,7 +14,6 @@ export default class MathFunctionNode extends MathBranchNode {
   }
 
   *getChildren() {
-    yield this.name;
     for (let arg of this.args)
       yield arg;
   }

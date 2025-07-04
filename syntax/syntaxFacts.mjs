@@ -4,6 +4,7 @@ export function getUnaryOperatorPrecedence(kind) {
   switch (kind) {
     case symbols.plus:
     case symbols.minus:
+    case symbols.plusMinus:
       return 6;
 
     default:
@@ -21,9 +22,13 @@ export function getBinaryOperatorPrecedence(kind) {
 
     case symbols.plus:
     case symbols.minus:
+    case symbols.plusMinus:
       return 4;
 
     case symbols.equals:
+    case symbols.approximatelyEqual:
+    case symbols.equivalentTo:
+    case symbols.congruentTo:
     case symbols.notEquals:
     case symbols.less:
     case symbols.lessEquals:

@@ -32,15 +32,8 @@ export default class MathHtmlEmmiter extends MathVisitor {
     return n;
   }
 
-  visitCharacter(node) {
-    return this.createElement('span', null, node.character);
-  }
-
-  visitName(node) {
-    const content = [...this.visitChildren(node)];
-    const n = this.createElement('span', null);
-    content.forEach(child => n.append(child));
-    return n;
+  visitSymbol(node) {
+    return this.createElement('span', null, node.symbol);
   }
 
   visitImplicitMultiplication(node) {
@@ -51,10 +44,11 @@ export default class MathHtmlEmmiter extends MathVisitor {
   }
 
   visitFunction(node) {
-    const args = node.args.map(a => this.visit(a)).join(", ");
-    return this.createElement('span', 'matdowninline-expression', 
-      this.visit(node.name), this.createElement('span', '(', args, ')')
-    );
+    const content = [...this.visitChildren(node)];
+    const n = this.createElement('span', 'matdowninline-expression', node.name, '(');
+    content.forEach(child => n.append(child));
+    n.append(')');
+    return n;
   }
 
   visitExponent(node) {
