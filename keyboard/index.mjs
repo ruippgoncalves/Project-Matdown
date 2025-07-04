@@ -9,6 +9,11 @@ export default class MathKeyboard {
     this.selectionRight = null;
   }
 
+  moveUp() {
+    if (this.current instanceof MathPlaceholderNode && this.current.parentNode !== null) this.current = this.current.parentNode;
+    else if (this.current.parentPlaceholder.parentNode !== null) this.current = this.current.parentPlaceholder.parentNode;
+  }
+
   moveRight() {
     if (!(this.current instanceof MathPlaceholderNode)) this.current = this.current.parentPlaceholder;
 
@@ -138,10 +143,23 @@ export default class MathKeyboard {
 
   delete() {
     if (this.current instanceof MathPlaceholderNode) {
-      if (this.current.parentNode !== null)
-        this.current = this.current.parentNode;
-      else
+      if (this.current.parentNode === null) return;
+      
+      const placeholders = this.current.parentNode.placeholders;
+      let placeholder = null;
+
+      for (let i = 0; i < placeholders.length && placeholder === null; i++) {
+        placeholder = placeholders[i].node;
+      }
+
+      this.current = this.current.parentNode;
+
+      if (placeholder !== null) {
+        this.delete();
+        this.insert(placeholder);
+
         return;
+      }
     }
 
     if (this.current instanceof MathNumberNode) {
