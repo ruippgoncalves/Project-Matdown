@@ -40,7 +40,7 @@ export default class MathVisitor {
   }
 
   visitChildren(node) {
-    return node.getChildren().map(c => this.visit(c));
+    return [...node.getChildren()].map(c => this.visit(c));
   }
 
   visitDigit(node) {

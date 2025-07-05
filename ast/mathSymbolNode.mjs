@@ -1,6 +1,6 @@
 import MathLeafNode from './base/mathLeafNode.mjs';
 
-export default class MathCharacterNode extends MathLeafNode {
+export default class MathSymbolNode extends MathLeafNode {
   constructor(symbol) {
     super();
     this.symbol = symbol;

@@ -112,6 +112,10 @@
     .symbolItem:hover {
       background: #eee;
     }
+    .invalid {
+      border: 2px solid red;
+      background-color: #fdd;
+    }
   </style>
 </head>
 <body>
@@ -119,6 +123,7 @@
 <div class="matdowncontainer">
   <h3>Formula:</h3>
   <div id="renderArea"></div>
+  <input type="text" id="algorithmInput" placeholder="Example: (3^2+1)/(19−10)">
   <div id="matdownkeyboard">
     <div id="delete">⌫</div>
     <div id="left">←</div>
@@ -135,16 +140,45 @@
 import {MathDigitNode, MathSymbolNode, MathUnaryOperationNode, MathOperationNode, MathPlaceholderNode, MathExponentNode, MathFractionNode, MathFunctionNode} from './ast/index.mjs';
 import MathKeyboard from './keyboard/index.mjs';
 import MathHtmlEmmiter from './output/htmlEmmiter.mjs';
+import MathParser from './syntax/parser.mjs';
+import MathUnparser from './syntax/unparser.mjs';
 import symbols from './syntax/symbols.mjs';
 
 const keyboard = new MathKeyboard();
 const emmiter = new MathHtmlEmmiter(keyboard);
+const unparser = new MathUnparser();
 
-function display() {
+function display(updateInput=true) {
+  if (updateInput) {
+    const outputMath = unparser.visit(keyboard.root);
+    document.getElementById('algorithmInput').value = outputMath;
+  }
+
   const outputHTML = emmiter.visit(keyboard.root);
   document.getElementById('renderArea').innerHTML = '';
   document.getElementById('renderArea').appendChild(outputHTML);
   document.getElementById('htmlOutput').value = '<div class="algorithm">\n' + outputHTML.innerHTML + '\n</div>';
+}
+
+document.getElementById('algorithmInput').addEventListener('input', (event) => {
+  const input = event.target.value;
+
+  try {
+    const parser = new MathParser(input);
+    keyboard.root = parser.parse();
+    keyboard.current = keyboard.root;
+    display(false);
+    document.getElementById('algorithmInput').classList.remove('invalid');
+  } catch (error) {
+    document.getElementById('algorithmInput').classList.add('invalid');
+  }
+});
+
+function inputIfNotEditing(action) {
+  return (...args) => {
+    if (document.getElementById('algorithmInput') === document.activeElement) return;
+    action(...args);
+  }
 }
 
 function registerNodeKey(key, create, insert=keyboard.insert) {
@@ -159,10 +193,10 @@ function registerNodeKey(key, create, insert=keyboard.insert) {
   div.appendChild(contents);
   element.appendChild(div);
   
-  const handleInsert = () => {
+  const handleInsert = inputIfNotEditing(() => {
     insert.bind(keyboard)(create());
     display();
-  };
+  });
 
   div.onclick = handleInsert;
 
@@ -196,7 +230,7 @@ registerNodeKey(null, () => new MathOperationNode(symbols.plusMinus));
 registerNodeKey(null, () => new MathUnaryOperationNode(symbols.plus));
 registerNodeKey(null, () => new MathUnaryOperationNode(symbols.minus));
 registerNodeKey(null, () => new MathUnaryOperationNode(symbols.plusMinus));
-registerNodeKey(symbols.times, () => new MathUnaryOperationNode(symbols.times));
+registerNodeKey(symbols.times, () => new MathOperationNode(symbols.times));
 registerNodeKey(symbols.division, () => new MathOperationNode(symbols.division));
 registerNodeKey(symbols.fraction, () => new MathFractionNode());
 registerNodeKey(symbols.exponent, () => new MathExponentNode());
@@ -227,12 +261,12 @@ registerNodeKey(null, () => new MathFunctionNode('arcsin', 1));
 registerNodeKey(null, () => new MathFunctionNode('arccos', 1));
 registerNodeKey(null, () => new MathFunctionNode('arctan', 1));
 
-document.getElementById('delete').onclick = () => {keyboard.delete(); display();};
-document.getElementById('left').onclick = () => {keyboard.moveLeft(); display();};
-document.getElementById('right').onclick = () => {keyboard.moveRight(); display();};
-document.getElementById('up').onclick = () => {keyboard.moveUp(); display();};
-document.getElementById('seperator').onclick = () => {keyboard.insertDecimalSeperator(); display();};
-document.addEventListener("keyup", (event) => {
+document.getElementById('delete').onclick = inputIfNotEditing(() => {keyboard.delete(); display();});
+document.getElementById('left').onclick = inputIfNotEditing(() => {keyboard.moveLeft(); display();});
+document.getElementById('right').onclick = inputIfNotEditing(() => {keyboard.moveRight(); display();});
+document.getElementById('up').onclick = inputIfNotEditing(() => {keyboard.moveUp(); display();});
+document.getElementById('seperator').onclick = inputIfNotEditing(() => {keyboard.insertDecimalSeperator(); display();});
+document.addEventListener("keyup", inputIfNotEditing((event) => {
   let handled = true;
 
   switch (event.key) {
@@ -263,7 +297,7 @@ document.addEventListener("keyup", (event) => {
     event.preventDefault();
     display();
   }
-});
+}));
 
 emmiter.onClick = display;
 display();
