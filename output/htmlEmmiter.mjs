@@ -11,7 +11,13 @@ export default class MathHtmlEmmiter extends MathVisitor {
     let result = super.visit(node);
 
     if (node instanceof MathBranchNode && node.requiresParenthesis()) {
-      result = this.createElement('span', 'matdowninline-expression', '(', result, ')');
+      const left = this.createElement('span', 'matdowninline-expression', '(');
+      const right = this.createElement('span', 'matdowninline-expression', ')');
+
+      this.scaleTo(left, result);
+      this.scaleTo(right, result);
+
+      result = this.createElement('span', 'matdowninline-expression', left, result, right);
     }
 
     return result;
@@ -106,5 +112,27 @@ export default class MathHtmlEmmiter extends MathVisitor {
     children.forEach(child => element.append(child));
 
     return element;
+  }
+
+  measure(tag) {
+    const tempDiv = document.createElement('div');
+    tempDiv.style.visibility = 'hidden';
+    tempDiv.style.position = 'absolute';
+
+    document.body.appendChild(tempDiv);
+    tempDiv.appendChild(tag);
+    const rect = tag.getBoundingClientRect();
+    document.body.removeChild(tempDiv);
+
+    return rect;
+  }
+
+  scaleTo(tag, to) {
+    const toHeight = this.measure(to).height;
+    const currentHeight = this.measure(tag).height;
+    const scale = toHeight / currentHeight;
+
+    if (scale > 1)
+      tag.style.transform = `scale(1, ${scale})`;
   }
 }
