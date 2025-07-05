@@ -11,34 +11,34 @@ export default class MathHtmlEmmiter extends MathVisitor {
     let result = super.visit(node);
 
     if (node instanceof MathBranchNode && node.requiresParenthesis()) {
-      result = this.createElement('span', null, '(', result, ')');
+      result = this.createElement('span', 'matdowninline-expression', '(', result, ')');
     }
 
     return result;
   }
 
   visitDigit(node) {
-    return this.createElement('span', null, node.digit);
+    return this.createElement('span', 'matdowninline-expression', node.digit);
   }
 
   visitDecimalSeperator(node) {
-    return this.createElement('span', null, '.');
+    return this.createElement('span', 'matdowninline-expression', '.');
   }
 
   visitNumber(node) {
     const content = [...this.visitChildren(node)];
-    const n = this.createElement('span', null);
+    const n = this.createElement('span', 'matdowninline-expression');
     content.forEach(child => n.append(child));
     return n;
   }
 
   visitSymbol(node) {
-    return this.createElement('span', null, node.symbol);
+    return this.createElement('span', 'matdowninline-expression', node.symbol);
   }
 
   visitImplicitMultiplication(node) {
     const content = [...this.visitChildren(node)];
-    const n = this.createElement('span', null);
+    const n = this.createElement('span', 'matdowninline-expression');
     content.forEach(child => n.append(child));
     return n;
   }
@@ -101,10 +101,7 @@ export default class MathHtmlEmmiter extends MathVisitor {
 
   createElement(tag, className, ...children) {
     const element = document.createElement(tag);
-
-    if (className) {
-      element.classList.add(className);
-    }
+    element.classList.add(className);
 
     children.forEach(child => element.append(child));
 
